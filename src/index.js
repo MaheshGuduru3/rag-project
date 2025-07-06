@@ -22,7 +22,7 @@ const TAVILY_API = process.env.TAVILY_SEARCH_API;
 
 
 const model = new ChatGroq({
-    model: "llama-3.1-8b-instant",
+    model: "llama-3.3-70b-versatile", // Recommended model 
     temperature: 0,
     apiKey: GROQ_API_KEY,
 });
@@ -45,8 +45,7 @@ When responding:
 - If a source appears multiple times, only include it once in the list (no duplicates).
 
 Format:
-Answer:
-<your answer>
+<your answer> 
 
 Sources:
 <unique, relevant links from metasource (one per line)>
@@ -75,7 +74,7 @@ const chatWithModel = async (query)=>{
   // when we ask a question based on that it will route to RAG
   // OR it will route to the real time data search from web
   const result = await realOrRagChain.invoke({question: query});
-    
+  console.log(result,"res", result.includes('rag'))
   const docPath = "./nodejs_tutorial.pdf";
     
    const loader = new PDFLoader(docPath);
@@ -106,7 +105,7 @@ const chatWithModel = async (query)=>{
     const standardRetriver =  RunnableSequence.from([
       standardQuestionChain,
       prev => prev,
-      result === 'rag' ? retriever_vect : retriever_Tavily,
+      result.includes('rag') === true || result === 'rag' ? retriever_vect : retriever_Tavily,
       (input)=> {
         // console.log(input)
         const content = {
