@@ -74,7 +74,7 @@ const chatWithModel = async (query)=>{
   // when we ask a question based on that it will route to RAG
   // OR it will route to the real time data search from web
   const result = await realOrRagChain.invoke({question: query});
-  console.log(result,"res", result.includes('rag'))
+ 
   const docPath = "./nodejs_tutorial.pdf";
     
    const loader = new PDFLoader(docPath);
